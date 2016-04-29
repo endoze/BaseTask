@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+xcodebuild -configuration "Debug" \
+           -scheme "BaseTask" \
+           -workspace "BaseTask.xcworkspace" \
+           build test | \
+  xcpretty --color \
+           --report html \
+           --output "build/reports/test-report.html" \
+           --screenshots \
+           --report junit \
+           --output "build/reports/test-report.xml"
