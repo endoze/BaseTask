@@ -4,6 +4,9 @@ Pod::Spec.new do |s|
   s.summary      = "Easy NSURLSession Networking"
 
   s.description  = <<-DESC
+                   BaseTask is a set of classes that allow you to easily create
+                   an API client for a web service. It reduces the boilerplate
+                   down to just the specifics you need to interact with an API.
                    DESC
 
   s.homepage     = "http://endoze.github.io/BaseTask"
