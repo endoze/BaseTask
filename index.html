@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Basetask by endoze</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Basetask</h1>
+        <h2>Easy NSURLSession Networking</h2>
+        <a href="https://github.com/endoze/BaseTask" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <p>BaseTask is a set of classes that allow you to easily create an API client
+for a web service. It reduces the boilerplate down to just the specifics you
+need to interact with an API.</p>
+
+<p><a href="https://travis-ci.org/endoze/BaseTask"><img src="https://travis-ci.org/endoze/BaseTask.svg" alt="Build Status"></a>
+<a href="https://coveralls.io/github/endoze/BaseTask?branch=master"><img src="https://coveralls.io/repos/github/endoze/BaseTask/badge.svg?branch=master" alt="Coverage Status"></a>
+<a href="http://cocoapods.org/pods/BaseTask"><img src="https://img.shields.io/cocoapods/l/BaseTask.svg?style=flat" alt="License"></a>
+<a href="http://cocoadocs.org/docsets/BaseTask"><img src="https://img.shields.io/cocoapods/p/BaseTask.svg?style=flat" alt="Platform"></a>
+<a href="https://img.shields.io/cocoapods/v/BaseTask.svg"><img src="https://img.shields.io/cocoapods/v/BaseTask.svg?style=flat" alt="CocoaPods"></a>
+<a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" alt="Carthage compatible"></a></p>
+
+<h2>
+<a id="motivation" class="anchor" href="#motivation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Motivation</h2>
+
+<p>When building applications that interact with web services, I wanted something
+that took advantage of the existing NSURLSession classes that Apple introduced
+with iOS 7 and OSX 10.9. I also wanted something that could be subclassed so I
+could encapsulate different web resource requests within concreate classes that
+only add in their specific details.</p>
+
+<h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li>Small public API surface</li>
+<li>Works with your own custom objects</li>
+<li>Customizeable via method override</li>
+<li>Well documented</li>
+<li>Tested</li>
+<li>Support For Cocoapods/Carthage integration</li>
+</ul>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<h3>
+<a id="carthage" class="anchor" href="#carthage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Carthage</h3>
+
+<p>Add the following to your Cartfile:</p>
+
+<pre><code>github "Endoze/BaseTask"
+</code></pre>
+
+<p>Then add the framework as a linked framework.</p>
+
+<h3>
+<a id="cocoapods" class="anchor" href="#cocoapods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>CocoaPods</h3>
+
+<p>Add the following to your Podfile:</p>
+
+<pre><code>use_frameworks!
+
+
+pod 'BaseTask'
+</code></pre>
+
+<p>Then run <code>pod install</code></p>
+
+<h2>
+<a id="show-me-the-code" class="anchor" href="#show-me-the-code" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Show me the code</h2>
+
+<h3>
+<a id="if-your-language-of-choice-is-swift" class="anchor" href="#if-your-language-of-choice-is-swift" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>If your language of choice is Swift</h3>
+
+<div class="highlight highlight-source-swift"><pre><span class="pl-c">// UserTask.swift</span>
+
+<span class="pl-k">import</span> <span class="pl-c1">BaseTask</span>
+
+<span class="pl-k">class</span> PostTask: BaseTask {
+  <span class="pl-k">typealias</span> Post <span class="pl-k">=</span> [<span class="pl-c1">String</span>: <span class="pl-c1">AnyObject</span>]
+  <span class="pl-k">typealias</span> GetPostCompletionHandler <span class="pl-k">=</span> (Post?, NSURLResponse?, NSError?) <span class="pl-k">-&gt;</span> <span class="pl-c1">Void</span>
+  <span class="pl-k">typealias</span> GetAllPostsCompletionHandler <span class="pl-k">=</span> ([Post]?, NSURLResponse?, NSError?) <span class="pl-k">-&gt;</span> <span class="pl-c1">Void</span>
+
+  <span class="pl-k">let</span> baseURLString <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>http://jsonplaceholder.typicode.com/posts<span class="pl-pds">"</span></span>
+
+  <span class="pl-k">func</span> <span class="pl-en">getPost</span>(id: <span class="pl-c1">String</span>, completionHandler: GetPostCompletionHandler) <span class="pl-k">-&gt;</span> NSURLSessionDataTask {
+    <span class="pl-k">let</span> url <span class="pl-k">=</span> NSURL(string: <span class="pl-s"><span class="pl-pds">"</span><span class="pl-pse">\(</span><span class="pl-s1">baseURLString</span><span class="pl-pse">)</span>/<span class="pl-pse">\(</span><span class="pl-s1">id</span><span class="pl-pse">)</span><span class="pl-pds">"</span></span>)<span class="pl-k">!</span>
+
+    <span class="pl-k">return</span> makeHTTPRequest(url,
+      bodyDictionary: <span class="pl-c1">nil</span>,
+      httpMethod: <span class="pl-k">.</span>Get,
+      httpHeaders: <span class="pl-c1">nil</span>,
+      bodyParser: <span class="pl-c1">nil</span>,
+      responseParsers: [JSONResponseParser()],
+      completion: { (parsedObject, response, error) <span class="pl-k">in</span>
+        <span class="pl-k">let</span> objectToReturn <span class="pl-k">=</span> parsedObject <span class="pl-k">as?</span> Post
+        completionHandler(objectToReturn, response, error)
+      }
+    )
+  }
+
+  <span class="pl-k">func</span> <span class="pl-en">getAllPosts</span>(completionHandler: GetAllPostsCompletionHandler) <span class="pl-k">-&gt;</span> NSURLSessionDataTask {
+    <span class="pl-k">let</span> url <span class="pl-k">=</span> NSURL(string: baseURLString)<span class="pl-k">!</span>
+
+    <span class="pl-k">return</span> makeHTTPRequest(url,
+      bodyDictionary: <span class="pl-c1">nil</span>,
+      httpMethod: <span class="pl-k">.</span>Get,
+      httpHeaders: <span class="pl-c1">nil</span>,
+      bodyParser: <span class="pl-c1">nil</span>,
+      responseParsers: [JSONResponseParser()],
+      completion: { (parsedObject, response, error) <span class="pl-k">in</span>
+        <span class="pl-k">let</span> objectToReturn <span class="pl-k">=</span> parsedObject <span class="pl-k">as?</span> [Post]
+        completionHandler(objectToReturn, response, error)
+    })
+  }
+}</pre></div>
+
+<div class="highlight highlight-source-swift"><pre><span class="pl-c">// Elsewhere</span>
+
+<span class="pl-k">let</span> task <span class="pl-k">=</span> PostTask()<span class="pl-k">.</span>getAllPosts() { posts, response, error <span class="pl-k">in</span>
+  <span class="pl-k">if</span> <span class="pl-k">let</span> posts <span class="pl-k">=</span> posts <span class="pl-k">where</span> error <span class="pl-k">==</span> <span class="pl-c1">nil</span> {
+    <span class="pl-c">// do something with posts</span>
+    <span class="pl-c1">print</span>(posts)
+  }
+}
+
+task<span class="pl-k">.</span>resume()</pre></div>
+
+<h3>
+<a id="or-if-you-prefer-objective-c" class="anchor" href="#or-if-you-prefer-objective-c" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Or if you prefer Objective-C</h3>
+
+<div class="highlight highlight-source-objc"><pre><span class="pl-c">// PostTask.h</span>
+
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>BaseTask.h<span class="pl-pds">"</span></span>
+
+<span class="pl-k">typedef</span> <span class="pl-c1">NSDictionary</span>&lt;<span class="pl-c1">NSString</span> *, <span class="pl-k">id</span>&gt; Post;
+<span class="pl-k">typedef</span> <span class="pl-en">void</span> (^GetAllPostsCallback)(<span class="pl-c1">NSArray</span>&lt;Post *&gt; * _Nullable posts, <span class="pl-c1">NSURLResponse</span> * _Nullable response, <span class="pl-c1">NSError</span> * _Nullable error);
+
+<span class="pl-k">@interface</span> <span class="pl-en">PostTask</span> : <span class="pl-e">BaseTask</span>
+
+- (<span class="pl-c1">NSString</span> *)<span class="pl-en">baseURL</span>;
+
+- (<span class="pl-k">void</span>)<span class="pl-en">getAllPostsWithCompletionHandler</span><span class="pl-en">:</span>(GetAllPostsCallback)<span class="pl-smi">completionHandler</span>;
+
+<span class="pl-k">@end</span></pre></div>
+
+<div class="highlight highlight-source-objc"><pre><span class="pl-c">// PostTask.m</span>
+
+#<span class="pl-k">import</span> <span class="pl-s"><span class="pl-pds">"</span>PostTask.h<span class="pl-pds">"</span></span>
+
+<span class="pl-k">@implementation</span> <span class="pl-en">PostTask</span>
+
+- (<span class="pl-c1">NSString</span> *)<span class="pl-en">baseURL</span>
+{
+    <span class="pl-k">return</span> <span class="pl-s"><span class="pl-pds">@"</span>http://jsonplaceholder.typicode.com/posts<span class="pl-pds">"</span></span>;
+}
+
+- (<span class="pl-k">void</span>)<span class="pl-en">getAllPostsWithCompletionHandler</span><span class="pl-en">:</span>(GetAllPostsCallback)<span class="pl-smi">completionHandler</span>
+{
+    <span class="pl-c1">NSURL</span> *url = [<span class="pl-c1">NSURL</span> <span class="pl-c1">URLWithString:</span>[<span class="pl-v">self</span> <span class="pl-c1">baseURL</span>]];
+
+  <span class="pl-k">return</span> [<span class="pl-v">self</span> <span class="pl-c1">makeHTTPRequest:</span>url
+                <span class="pl-c1">bodyDictionary:</span><span class="pl-c1">nil</span>
+                    <span class="pl-c1">httpMethod:</span>GET
+                   <span class="pl-c1">httpHeaders:</span><span class="pl-c1">nil</span>
+                    <span class="pl-c1">bodyParser:</span><span class="pl-c1">nil</span>
+               <span class="pl-c1">responseParsers:</span>@[[JSONResponseParser <span class="pl-c1">new</span>]]
+                <span class="pl-c1">dispatch_queue:</span><span class="pl-c1">nil</span>
+                    <span class="pl-c1">completion:</span>completionHandler];
+}
+
+<span class="pl-k">@end</span></pre></div>
+
+<div class="highlight highlight-source-objc"><pre><span class="pl-c">// Elsewhere</span>
+
+<span class="pl-c1">NSURLSessionDataTask</span> *task = [[PostTask <span class="pl-c1">new</span>]
+ getAllPostsWithCompletionHandler:^(<span class="pl-c1">NSArray</span>&lt;Post *&gt; *posts, <span class="pl-c1">NSURLResponse</span> *response, <span class="pl-c1">NSError</span> *error) {
+    <span class="pl-k">if</span> (!error &amp;&amp; posts) {
+      <span class="pl-c">// do something with posts</span>
+        <span class="pl-c1">NSLog</span>(<span class="pl-s"><span class="pl-pds">@"</span><span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, posts);
+    }
+}];
+
+[task <span class="pl-c1">resume</span>];</pre></div>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/endoze/BaseTask/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/endoze/BaseTask/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/endoze/BaseTask"></a> is maintained by <a href="https://github.com/endoze">endoze</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
