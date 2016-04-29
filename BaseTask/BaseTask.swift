@@ -9,112 +9,107 @@
 import Foundation
 
 /**
- <#Description#>
-
- - Get:    <#Get description#>
- - Post:   <#Post description#>
- - Put:    <#Put description#>
- - Patch:  <#Patch description#>
- - Delete: <#Delete description#>
+ Enum representing the different types of HTTP methods.
  */
 @objc public enum HTTPMethod: Int {
   /**
-   *  <#Description#>
+   *  HTTP Get
    */
   case Get
 
   /**
-   *  <#Description#>
+   *  HTTP Post
    */
   case Post
 
   /**
-   *  <#Description#>
+   *  HTTP Put
    */
   case Put
 
   /**
-   *  <#Description#>
+   *  HTTP Patch
    */
   case Patch
 
   /**
-   *  <#Description#>
+   *  HTTP Delete
    */
   case Delete
 }
 
 /**
- *  <#Description#>
+ *  Protocol that describes an object that can parse a dictionary into the correct format for an http request body.
  */
 public protocol BodyParseable {
   /**
-   <#Description#>
+   This method accepts a dictionary and returns NSData or nil. The return of this method is used as the http requests body.
 
-   - parameter bodyDictionary: <#bodyDictionary description#>
-
-   - returns: <#return value description#>
+   - parameter bodyDictionary: Dictionary containing values being sent in the body of an http request.
+   
+   - returns: NSData or nil.
    */
   func parsedBody(bodyDictionary: [String: AnyObject]?) -> NSData?
 }
 
 /**
- *  <#Description#>
+ *  Protocol that describes an object that can parse a response from an http request into another form. Objects that implment this protocol can be chained together to do multistep processing of values returned from an http request.
  */
 public protocol ResponseParseable {
   /**
-   <#Description#>
+   This method accepts an object and returns another object or nil. An example could be transforming NSData into an NSDictionary.
 
-   - parameter jsonData: <#jsonData description#>
+   - parameter data: Data from the http response or from another ResponseParseable.
 
-   - returns: <#return value description#>
+   - returns: Returns an object or nil.
    */
-  func parsedObject(jsonData: AnyObject?) -> AnyObject?
+  func parsedObject(data: AnyObject?) -> AnyObject?
 }
 
-/// <#Description#>
+/// BaseTask is a class designed to be subclassed. It helps in defining an API interface to a web service.
 public class BaseTask: NSObject {
-    /// <#Description#>
+    /// Closure that captures what to do when an http request completes and a response sent back.
   public typealias CompletionHandler = (parsedObject: AnyObject?, response: NSURLResponse?, error: NSError?) -> Void
-    /// <#Description#>
+
+    /// Closure that captures logic on how to validate an http response sent back from a server.
   public typealias ValidationHandler = (response: NSURLResponse, data: NSData?, inout error: NSError?) -> Bool
 
-    /// <#Description#>
+    /// The session to use when making requests.
   var session: NSURLSession
 
-    /// <#Description#>
+    /// The default body parser to use when sending requests.
   var defaultBodyParser = BodyParser()
 
-    /// <#Description#>
+    /// The default chain of response parsers to use when parsing an http response body.
   var defaultResponseParsers: [ResponseParseable] = []
 
-    /// <#Description#>
+    /// The closure to use when validating http response bodies.
   var validationHandler: ValidationHandler?
 
   /**
-   <#Description#>
+   This is the default initializer for BaseTask. It defaults to using a session created from the standard shared session configuration.
 
-   - parameter session: <#session description#>
+   - parameter session: NSURLSession to use when making requests. Defaults to using a session created from the standard shared session configuration.
 
-   - returns: <#return value description#>
+   - returns: An instance of BaseTask.
    */
   public init(session: NSURLSession = NSURLSession(configuration: NSURLSession.sharedSession().configuration)) {
     self.session = session
   }
 
   /**
-   <#Description#>
+   This is the workhorse method that creates new instances of NSURLSessionDataTask created based on the parameters passed in.
 
-   - parameter url:             <#url description#>
-   - parameter bodyDictionary:  <#bodyDictionary description#>
-   - parameter httpMethod:      <#httpMethod description#>
-   - parameter httpHeaders:     <#httpHeaders description#>
-   - parameter bodyParser:      <#bodyParser description#>
-   - parameter responseParsers: <#responseParsers description#>
-   - parameter dispatchQueue:   <#dispatchQueue description#>
-   - parameter completion:      <#completion description#>
+   - parameter url:             URL that you are sending your requests to.
+   - parameter bodyDictionary:  Dictionary representing the data send in the http request body.
+   - parameter httpMethod:      HTTP method to use when making the request.
+   - parameter httpHeaders:     HTTP headers to use when making the request.
+   - parameter bodyParser:      Body parser to use when parsing the bodyDictionary.
+   - parameter responseParsers: Chain of response parsers to use when parsing an http response body.
+   - parameter dispatchQueue:   Dispatch queue to run the completion handler on.
+   - parameter completion:      Closure that captures logic to execute after completion of the request/response cycle.
 
-   - returns: <#return value description#>
+   - returns: Returns a ready to go NSURLSessionDataTask configured based on the parameters passed in. Calling resume on it starts your request.
    */
   public func makeHTTPRequest(url: NSURL,
     bodyDictionary: [String: AnyObject]?,

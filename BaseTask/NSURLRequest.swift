@@ -8,19 +8,18 @@
 
 import Foundation
 
-// MARK: - <#Description#>
+// MARK: - NSURLRequest Extension
 extension NSURLRequest {
   /**
-   <#Description#>
+   HTTP request method options
 
-   - GET:    <#GET description#>
-   - PUT:    <#PUT description#>
-   - POST:   <#POST description#>
-   - DELETE: <#DELETE description#>
-   - PATCH:  <#PATCH description#>
+   - GET:    Get request
+   - PUT:    Put request
+   - POST:   Post request
+   - DELETE: Delete request
+   - PATCH:  Patch request
    */
   enum HTTPMethod: String {
-    
     case GET
     case PUT
     case POST
@@ -29,77 +28,77 @@ extension NSURLRequest {
   }
 
   /**
-   <#Description#>
+   Method used to create a GET NSURLRequest.
 
-   - parameter url:     <#url description#>
-   - parameter headers: <#headers description#>
+   - parameter url:     URL to request.
+   - parameter headers: Headers to set on NSURLRequest.
 
-   - returns: <#return value description#>
+   - returns: Returns an NSURLRequest instance.
    */
   class func getRequest(url: NSURL, headers: [HTTPHeader]?) -> NSURLRequest {
     return _request(url, httpMethod: .GET, body: nil, headers: headers)
   }
 
   /**
-   <#Description#>
+   Method used to create a DELETE NSURLRequest.
 
-   - parameter url:     <#url description#>
-   - parameter headers: <#headers description#>
+   - parameter url:     URL to request.
+   - parameter headers: Headers to set on NSURLRequest.
 
-   - returns: <#return value description#>
+   - returns: Returns an NSURLRequest instance.
    */
   class func deleteRequest(url: NSURL, headers: [HTTPHeader]?) -> NSURLRequest {
     return _request(url, httpMethod: .DELETE, body: nil, headers: headers)
   }
 
   /**
-   <#Description#>
+   Method used to create a POST NSURLRequest.
 
-   - parameter url:     <#url description#>
-   - parameter body:    <#body description#>
-   - parameter headers: <#headers description#>
+   - parameter url:     URL to request.
+   - parameter body:    Body of HTTP Request.
+   - parameter headers: Headers to set on NSURLRequest.
 
-   - returns: <#return value description#>
+   - returns: Returns an NSURLRequest instance.
    */
   class func postRequest(url: NSURL, body: NSData?, headers: [HTTPHeader]? = nil) -> NSURLRequest {
     return _request(url, httpMethod: .POST, body: body, headers: headers)
   }
 
   /**
-   <#Description#>
+   Method used to create a PATCH NSURLRequest.
 
-   - parameter url:     <#url description#>
-   - parameter body:    <#body description#>
-   - parameter headers: <#headers description#>
+   - parameter url:     URL to request.
+   - parameter body:    Body of HTTP Request.
+   - parameter headers: Headers to set on NSURLRequest.
 
-   - returns: <#return value description#>
+   - returns: Returns an NSURLRequest instance.
    */
   class func patchRequest(url: NSURL, body: NSData?, headers: [HTTPHeader]? = nil) -> NSURLRequest {
     return _request(url, httpMethod: .PATCH, body: body, headers: headers)
   }
 
   /**
-   <#Description#>
+   Method used to create a PUT NSURLRequest.
 
-   - parameter url:     <#url description#>
-   - parameter body:    <#body description#>
-   - parameter headers: <#headers description#>
+   - parameter url:     URL to request.
+   - parameter body:    Body of HTTP Request.
+   - parameter headers: Headers to set on NSURLRequest.
 
-   - returns: <#return value description#>
+   - returns: Returns an NSURLRequest instance.
    */
   class func putRequest(url: NSURL, body: NSData?, headers: [HTTPHeader]? = nil) -> NSURLRequest {
     return _request(url, httpMethod: .PUT, body: body, headers: headers)
   }
 
   /**
-   <#Description#>
+   Method used to create a new NSURLRequest configured based on the method paramaters passed in.
 
-   - parameter url:        <#url description#>
-   - parameter httpMethod: <#httpMethod description#>
-   - parameter body:       <#body description#>
-   - parameter headers:    <#headers description#>
+   - parameter url:        URL to request.
+   - parameter httpMethod: HTTP method for request.
+   - parameter body:       Body of HTTP Request.
+   - parameter headers:    Headers to set on NSURLRequest.
 
-   - returns: <#return value description#>
+   - returns: Returns an NSURLRequest instance.
    */
   private class func _request(url: NSURL, httpMethod: HTTPMethod, body: NSData?, headers: [HTTPHeader]?) -> NSURLRequest {
     let request = NSMutableURLRequest(URL: url)

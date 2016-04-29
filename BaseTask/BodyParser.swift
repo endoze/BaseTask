@@ -8,14 +8,14 @@
 
 import Foundation
 
-/// <#Description#>
+/// Basic implementation of BodyParseable that uses NSJSONSerialization to parse the dictionary into NSData.
 class BodyParser: NSObject, BodyParseable {
   /**
-   <#Description#>
+   This method accepts a dictionary and returns NSData or nil. The return of this method is used as the http requests body.
 
-   - parameter bodyDictionary: <#bodyDictionary description#>
-
-   - returns: <#return value description#>
+   - parameter bodyDictionary: Dictionary containing values being sent in the body of an http request.
+   
+   - returns: NSData or nil.
    */
   func parsedBody(bodyDictionary: [String : AnyObject]?) -> NSData? {
     if let bodyDictionary = bodyDictionary, bodyData = try? NSJSONSerialization.dataWithJSONObject(bodyDictionary, options: .PrettyPrinted) {

@@ -8,41 +8,32 @@
 
 import Foundation
 
-/// <#Description#>
+/// This response parser is used to pull values from a JSON dictionary for a given key.
 public class JSONKeyResponseParser: NSObject, ResponseParseable {
-    /// <#Description#>
-  var responseKey: String?
+    /// Key to use when returning values from a dictionary.
+  var responseKey: String
 
   /**
-   <#Description#>
+   Default constructor for creating a new JSONKeyResponseParser.
 
-   - returns: <#return value description#>
+   - parameter responseKey: Key to use when returning values from a dictionary.
+
+   - returns: A new instance of JSONKeyResponseParser.
    */
-  override init() {
-    self.responseKey = nil
-  }
-
-  /**
-   <#Description#>
-
-   - parameter responseKey: <#responseKey description#>
-
-   - returns: <#return value description#>
-   */
-  init(responseKey: String) {
+  public init(responseKey: String) {
     self.responseKey = responseKey
   }
 
   /**
-   <#Description#>
+   This method accepts a dictionary and returns the value for the given responseKey or nil.
 
-   - parameter jsonData: <#jsonData description#>
+   - parameter data: A dictionary from another ResponseParseable.
 
-   - returns: <#return value description#>
+   - returns: Returns an object or nil.
    */
-  public func parsedObject(jsonData: AnyObject?) -> AnyObject? {
-    if let jsonData = jsonData as? [String: AnyObject], responseKey = responseKey {
-      return jsonData[responseKey]
+  public func parsedObject(data: AnyObject?) -> AnyObject? {
+    if let data = data as? [String: AnyObject] {
+      return data[responseKey]
     } else {
       return nil
     }

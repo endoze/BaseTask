@@ -8,12 +8,23 @@
 
 import Foundation
 
-/// <#Description#>
+/// This class is used to represent an HTTP header name and value.
 public class HTTPHeader: NSObject {
+    /// HTTP header name.
   let key: String
+
+    /// HTTP header value.
   let value: String
 
-  init(key: String, value: String) {
+  /**
+   Default constructor for creating a new HTTPHeader.
+
+   - parameter key:   HTTP header name.
+   - parameter value: HTTP header value.
+
+   - returns: An instance of the HTTPHeader class.
+   */
+  public init(key: String, value: String) {
     self.key = key
     self.value = value
   }

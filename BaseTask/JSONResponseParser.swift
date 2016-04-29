@@ -8,17 +8,17 @@
 
 import Foundation
 
-/// <#Description#>
+/// This response parser is used to parse NSData from an http response body into JSON.
 public class JSONResponseParser: NSObject, ResponseParseable {
   /**
-   <#Description#>
+   This method accepts NSData and returns a JSON dictionary or nil.
 
-   - parameter jsonData: <#jsonData description#>
+   - parameter data: A dictionary from another ResponseParseable.
 
-   - returns: <#return value description#>
+   - returns: Returns an object or nil.
    */
-  public func parsedObject(jsonData: AnyObject?) -> AnyObject? {
-    if let jsonData = jsonData as? NSData, parsedObject = try? NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments) {
+  public func parsedObject(data: AnyObject?) -> AnyObject? {
+    if let jsonData = data as? NSData, parsedObject = try? NSJSONSerialization.JSONObjectWithData(jsonData, options: .AllowFragments) {
       return parsedObject
     } else {
       return nil
