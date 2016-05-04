@@ -75,16 +75,16 @@ public class BaseTask: NSObject {
   public typealias ValidationHandler = (response: NSURLResponse, data: NSData?, error: NSErrorPointer) -> Bool
 
     /// The session to use when making requests.
-  var session: NSURLSession
+  public var session: NSURLSession
 
     /// The default body parser to use when sending requests.
-  var defaultBodyParser: BodyParseable = BodyParser()
+  public var defaultBodyParser: BodyParseable = BodyParser()
 
     /// The default chain of response parsers to use when parsing an http response body.
-  var defaultResponseParsers: [ResponseParseable] = []
+  public var defaultResponseParsers: [ResponseParseable] = []
 
     /// The closure to use when validating http response bodies.
-  var validationHandler: ValidationHandler = { response, data, error in
+  public var validationHandler: ValidationHandler = { response, data, error in
     return true
   }
 
@@ -136,10 +136,10 @@ public class BaseTask: NSObject {
 
     switch httpMethod {
       case .Get: request = NSURLRequest.getRequest(url, headers: httpHeaders)
-      case .Put: request = NSURLRequest.putRequest(url, body: bodyData)
-      case .Patch: request = NSURLRequest.patchRequest(url, body: bodyData)
+      case .Put: request = NSURLRequest.putRequest(url, body: bodyData, headers: httpHeaders)
+      case .Patch: request = NSURLRequest.patchRequest(url, body: bodyData, headers: httpHeaders)
       case .Delete: request = NSURLRequest.deleteRequest(url, headers: httpHeaders)
-      case .Post: request = NSURLRequest.postRequest(url, body: bodyData)
+      case .Post: request = NSURLRequest.postRequest(url, body: bodyData, headers: httpHeaders)
     }
 
     return session.dataTaskWithRequest(request, completionHandler: { data, response, error in

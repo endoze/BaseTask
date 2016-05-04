@@ -11,10 +11,10 @@ import Foundation
 /// This class is used to represent an HTTP header name and value.
 public class HTTPHeader: NSObject {
     /// HTTP header name.
-  let key: String
+  public let key: String
 
     /// HTTP header value.
-  let value: String
+  public let value: String
 
   /**
    Default constructor for creating a new HTTPHeader.
