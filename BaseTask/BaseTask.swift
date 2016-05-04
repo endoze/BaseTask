@@ -41,7 +41,7 @@ import Foundation
 /**
  *  Protocol that describes an object that can parse a dictionary into the correct format for an http request body.
  */
-public protocol BodyParseable {
+@objc public protocol BodyParseable {
   /**
    This method accepts a dictionary and returns NSData or nil. The return of this method is used as the http requests body.
 
@@ -55,7 +55,7 @@ public protocol BodyParseable {
 /**
  *  Protocol that describes an object that can parse a response from an http request into another form. Objects that implment this protocol can be chained together to do multistep processing of values returned from an http request.
  */
-public protocol ResponseParseable {
+@objc public protocol ResponseParseable {
   /**
    This method accepts an object and returns another object or nil. An example could be transforming NSData into an NSDictionary.
 
@@ -72,19 +72,21 @@ public class BaseTask: NSObject {
   public typealias CompletionHandler = (parsedObject: AnyObject?, response: NSURLResponse?, error: NSError?) -> Void
 
     /// Closure that captures logic on how to validate an http response sent back from a server.
-  public typealias ValidationHandler = (response: NSURLResponse, data: NSData?, inout error: NSError?) -> Bool
+  public typealias ValidationHandler = (response: NSURLResponse, data: NSData?, error: NSErrorPointer) -> Bool
 
     /// The session to use when making requests.
   var session: NSURLSession
 
     /// The default body parser to use when sending requests.
-  var defaultBodyParser = BodyParser()
+  var defaultBodyParser: BodyParseable = BodyParser()
 
     /// The default chain of response parsers to use when parsing an http response body.
   var defaultResponseParsers: [ResponseParseable] = []
 
     /// The closure to use when validating http response bodies.
-  var validationHandler: ValidationHandler?
+  var validationHandler: ValidationHandler = { response, data, error in
+    return true
+  }
 
   /**
    This is the default initializer for BaseTask. It defaults to using a session created from the standard shared session configuration.
@@ -142,15 +144,13 @@ public class BaseTask: NSObject {
 
     return session.dataTaskWithRequest(request, completionHandler: { data, response, error in
       var parsedObject: AnyObject?
-      var internalError = error
+      var internalError: NSError? = error
 
       if let response = response, data = data {
         if internalError == nil {
-          if let validationHandler = self.validationHandler {
-            validationHandler(response: response, data: data, error: &internalError)
-          }
+          let isValidated = self.validationHandler(response: response, data: data, error: &internalError)
 
-          if internalError == nil {
+          if internalError == nil && isValidated {
             parsedObject = responseParsersToUse.reduce(data as AnyObject) { $1.parsedObject($0) }
           }
         }

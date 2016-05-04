@@ -13,3 +13,5 @@ FOUNDATION_EXPORT double BaseTaskVersionNumber;
 
 //! Project version string for BaseTask.
 FOUNDATION_EXPORT const unsigned char BaseTaskVersionString[];
+
+#import <BaseTask/BaseTaskObjC.h>
