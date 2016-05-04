@@ -118,12 +118,12 @@ task.resume()
 ```objective-c
 // PostTask.h
 
-#import "BaseTask.h"
+@import BaseTask;
 
 typedef NSDictionary<NSString *, id> Post;
 typedef void (^GetAllPostsCallback)(NSArray<Post *> * _Nullable posts, NSURLResponse * _Nullable response, NSError * _Nullable error);
 
-@interface PostTask : BaseTask
+@interface PostTask : BaseTaskObjC
 
 - (NSString *)baseURL;
 
