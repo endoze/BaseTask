@@ -103,7 +103,7 @@ public class BaseTask: NSObject {
    This is the workhorse method that creates new instances of NSURLSessionDataTask created based on the parameters passed in.
 
    - parameter url:             URL that you are sending your requests to.
-   - parameter bodyDictionary:  Dictionary representing the data send in the http request body.
+   - parameter bodyDictionary:  Dictionary representing the data sent in the http request body.
    - parameter httpMethod:      HTTP method to use when making the request.
    - parameter httpHeaders:     HTTP headers to use when making the request.
    - parameter bodyParser:      Body parser to use when parsing the bodyDictionary.
