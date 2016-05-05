@@ -486,6 +486,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5A022B3557C41F363418F682 /* Pods-BaseTaskSpecs.debug.xcconfig */;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)",
@@ -502,6 +503,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0DA9A38401EE98063A7F2846 /* Pods-BaseTaskSpecs.release.xcconfig */;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)",
