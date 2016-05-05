@@ -11,7 +11,7 @@ import Foundation
 /// This response parser is used to pull values from a JSON dictionary for a given key.
 public class JSONKeyResponseParser: NSObject, ResponseParseable {
     /// Key to use when returning values from a dictionary.
-  var responseKey: String
+  public var responseKey: String
 
   /**
    Default constructor for creating a new JSONKeyResponseParser.
